@@ -68,7 +68,7 @@ public class SpringMongoConfig extends AbstractMongoConfiguration {
 	@Bean
 	public MongoTemplate mongoTemplate() throws Exception {
 		MongoTemplate mongoTemplate = new MongoTemplate(mongo(), getDatabaseName());
-		mongoTemplate.setWriteConcern(new WriteConcern(1));
+		mongoTemplate.setWriteConcern(WriteConcern.ACKNOWLEDGED);
 		return mongoTemplate;
 	}    
 }

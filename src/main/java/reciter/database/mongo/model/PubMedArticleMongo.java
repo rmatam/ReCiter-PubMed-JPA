@@ -5,19 +5,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import reciter.model.pubmed.PubMedArticle;
 
-@Document(collection="pubmedarticlemongo")
+@Document(collection="pubmedarticle")
 public class PubMedArticleMongo {
 
 	@Id
-	private String id;
-	
+	private long id;
+
 	private PubMedArticle pubMedArticle;
 
-	public String getId() {
+	public long getObjectId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

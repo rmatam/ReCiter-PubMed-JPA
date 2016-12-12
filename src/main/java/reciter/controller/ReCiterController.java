@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import reciter.model.pubmed.PubMedArticle;
 import reciter.service.PubMedService;
@@ -21,11 +23,18 @@ public class ReCiterController {
 	@Autowired
 	private PubMedService pubMedService;
 	
-	@RequestMapping(value = "/reciter/save/pubmed/articles/", method = RequestMethod.POST)
+	@RequestMapping(value = "/reciter/save/pubmed/articles/", method = RequestMethod.PUT)
+	@ResponseBody
 	public void savePubMedArticles(@RequestBody List<PubMedArticle> pubMedArticles) {
-
-		slf4jLogger.info("calling savePubMedArticles with numberOfPubmedArticles=[" + pubMedArticles.size() + "]");
+		slf4jLogger.info("calling savePubMedArticles with numberOfPubmedArticles=" + pubMedArticles.size());
 		pubMedService.save(pubMedArticles);
+	}
+	
+	@RequestMapping(value = "/reciter/find/pubmed/articles/pmids/", method = RequestMethod.GET)
+	@ResponseBody
+	public List<PubMedArticle> findByPmids(@RequestParam List<Long> pmids) {
+		slf4jLogger.info("calling findByPmids with size of pmids=" + pmids);
+		return pubMedService.findByPmids(pmids);
 	}
 }
 

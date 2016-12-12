@@ -2,6 +2,7 @@ package reciter.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,13 @@ public class PubMedServiceImpl implements PubMedService {
 
 	@Autowired
 	private PubMedRepository pubMedRepository;
-	
+
 	@Override
 	public void save(Collection<PubMedArticle> pubMedArticles) {
 		List<PubMedArticleMongo> pubMedArticleMongos = new ArrayList<>();
 		for (PubMedArticle pubMedArticle : pubMedArticles) {
 			PubMedArticleMongo pubMedArticleMongo = new PubMedArticleMongo();
+			pubMedArticleMongo.setId(pubMedArticle.getMedlineCitation().getMedlineCitationPMID().getPmid());
 			pubMedArticleMongo.setPubMedArticle(pubMedArticle);
 			pubMedArticleMongos.add(pubMedArticleMongo);
 		}
@@ -31,10 +33,10 @@ public class PubMedServiceImpl implements PubMedService {
 
 	@Override
 	public List<PubMedArticle> findByPmids(List<Long> pmids) {
-		List<PubMedArticleMongo> pubMedArticleMongos = pubMedRepository.findByPubMedArticleMedlineCitationMedlineCitationPMIDPmid(pmids);
-		List<PubMedArticle> pubMedArticles = new ArrayList<>();
-		for (PubMedArticleMongo pubMedArticleMongo : pubMedArticleMongos) {
-			pubMedArticles.add(pubMedArticleMongo.getPubMedArticle());
+		Iterator<PubMedArticleMongo> iterator = pubMedRepository.findAll(pmids).iterator();
+		List<PubMedArticle> pubMedArticles = new ArrayList<>(pmids.size());
+		while (iterator.hasNext()) {
+			pubMedArticles.add(iterator.next().getPubMedArticle());
 		}
 		return pubMedArticles;
 	}
